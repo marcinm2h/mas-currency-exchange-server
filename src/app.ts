@@ -3,17 +3,17 @@ import { Request, Response } from 'express';
 import * as bodyParser from 'body-parser';
 import { createConnection, ConnectionOptions } from 'typeorm';
 import { root } from './paths';
-import { BankAccount } from './entity/BankAccount';
-import { Client } from './entity/Client';
-import { CreditCard } from './entity/CreditCard';
-import { Currency } from './entity/Currency';
-import { IdentificationDocument } from './entity/IdentificationDocument';
-import { Moderator } from './entity/Moderator';
-import { ModeratorClient } from './entity/ModeratorClient';
-import { PaymentOffer } from './entity/PaymentOffer';
-import { PurchaseOffer } from './entity/PurchaseOffer';
-import { Wallet } from './entity/Wallet';
-import { WalletTransaction } from './entity/WalletTransaction';
+import { BankAccount } from './models/BankAccount';
+import { Client } from './models/Client';
+import { CreditCard } from './models/CreditCard';
+import { Currency } from './models/Currency';
+import { IdentificationDocument } from './models/IdentificationDocument';
+import { Moderator } from './models/Moderator';
+import { ModeratorClient } from './models/ModeratorClient';
+import { PaymentOffer } from './models/PaymentOffer';
+import { PurchaseOffer } from './models/PurchaseOffer';
+import { Wallet } from './models/Wallet';
+import { WalletTransaction } from './models/WalletTransaction';
 
 const options: ConnectionOptions = {
   type: 'sqlite',
@@ -36,34 +36,41 @@ const options: ConnectionOptions = {
 };
 
 createConnection(options).then(connection => {
-  // const userRepository = connection.getRepository(User);
-  // // create and setup express app
-  // const app = express();
-  // app.use(bodyParser.json());
-  // // register routes
-  // app.get('/users', async function(req: Request, res: Response) {
-  //   const users = await userRepository.find();
-  //   res.json(users);
-  // });
-  // app.get('/users/:id', async function(req: Request, res: Response) {
-  //   const results = await userRepository.findOne(req.params.id);
-  //   return res.send(results);
-  // });
-  // app.post('/users', async function(req: Request, res: Response) {
-  //   const user = await userRepository.create(req.body);
-  //   const results = await userRepository.save(user);
-  //   return res.send(results);
-  // });
-  // app.put('/users/:id', async function(req: Request, res: Response) {
-  //   const user = await userRepository.findOne(req.params.id);
-  //   await userRepository.merge(user, req.body);
-  //   const results = await userRepository.save(user);
-  //   return res.send(results);
-  // });
-  // app.delete('/users/:id', async function(req: Request, res: Response) {
-  //   const results = await userRepository.remove(req.params.id);
-  //   return res.send(results);
-  // });
-  // app.listen(3000);
-  // console.log('Server is running at 3000');
+  const app = express();
+  app.use(bodyParser.json());
+
+  //FIXME: move to /routes + /controllers
+  const clientRepository = connection.getRepository(Client);
+
+  app.get('/clients', async function(req: Request, res: Response) {
+    const clients = await clientRepository.find();
+    res.json(clients);
+  });
+
+  app.get('/clients/:id', async function(req: Request, res: Response) {
+    const results = await clientRepository.findOne(req.params.id);
+    return res.send(results);
+  });
+
+  app.post('/clients', async function(req: Request, res: Response) {
+    const client = await clientRepository.create(req.body);
+    const results = await clientRepository.save(client);
+    return res.send(results);
+  });
+
+  app.put('/clients/:id', async function(req: Request, res: Response) {
+    const client = await clientRepository.findOne(req.params.id);
+    await clientRepository.merge(client, req.body);
+    const results = await clientRepository.save(client);
+    return res.send(results);
+  });
+
+  app.delete('/clients/:id', async function(req: Request, res: Response) {
+    const results = await clientRepository.remove(req.params.id);
+    return res.send(results);
+  });
+
+  app.listen(3000);
+
+  console.log('Server is running at 3000');
 });
