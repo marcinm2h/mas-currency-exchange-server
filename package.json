@@ -7,6 +7,9 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "husky": ">=1",
+    "lint-staged": ">=8",
+    "prettier": "^1.18.2",
     "typescript": "^3.5.1"
   },
   "dependencies": {
@@ -18,5 +21,21 @@
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^4.0.8",
     "typeorm": "^0.2.18"
+  },
+  "scripts": {
+    "start": "node out/app.js",
+    "compile": "npx tsc",
+    "compile:watch": "npx tsc -w"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md,ts}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

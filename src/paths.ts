@@ -1,3 +1,3 @@
-import * as path from "path"
+import * as path from 'path';
 
-export const root: string = path.resolve(__dirname, "..")
+export const root: string = path.resolve(__dirname, '..');
