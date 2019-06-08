@@ -24,8 +24,8 @@
   },
   "scripts": {
     "start": "node out/app.js",
-    "compile": "npx tsc",
-    "compile:watch": "npx tsc -w"
+    "build": "npx tsc",
+    "build:watch": "npx tsc -w"
   },
   "husky": {
     "hooks": {

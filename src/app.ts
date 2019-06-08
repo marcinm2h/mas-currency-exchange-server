@@ -4,11 +4,13 @@ import * as bodyParser from 'body-parser';
 import { createConnection, ConnectionOptions } from 'typeorm';
 import { User } from './entity/User';
 import { root } from './paths';
+import { Money } from './entity/Money';
 
 const options: ConnectionOptions = {
   type: 'sqlite',
   database: `${root}/db.sqlite`,
-  entities: [User],
+  entities: [User, Money],
+  synchronize: true,
   logging: true
 };
 
@@ -49,6 +51,6 @@ createConnection(options).then(connection => {
     return res.send(results);
   });
 
-  // start express server
   app.listen(3000);
+  console.log('Server is running at 3000');
 });
