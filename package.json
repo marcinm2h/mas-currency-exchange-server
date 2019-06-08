@@ -1,0 +1,9 @@
+{
+  "name": "mas-currency-exchange-server",
+  "version": "1.0.0",
+  "description": "MAS 2019 Currency Exchange App",
+  "main": "index.js",
+  "author": "Marcin Moch",
+  "license": "MIT",
+  "private": true
+}
