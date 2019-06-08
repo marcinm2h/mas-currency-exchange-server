@@ -15,11 +15,11 @@ build/Release
 # Dependency directories
 node_modules/
 
-# TypeScript v1 declaration files
-typings/
-
 # TypeScript cache
 *.tsbuildinfo
+
+# TypeScript output
+out/
 
 # Optional npm cache directory
 .npm
