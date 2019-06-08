@@ -1,5 +1,6 @@
-import { PaymentTool } from './abstracts/PaymentTool.abstract';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { PaymentTool } from './abstracts/PaymentTool.abstract';
+import { validateAccountNumber } from '../validators/validateAccountNumber';
 
 @Entity()
 export class BankAccount extends PaymentTool {
@@ -12,5 +13,7 @@ export class BankAccount extends PaymentTool {
   @Column()
   bankName: string;
 
-  //zwaliduj poprawność numeru()
+  validate(value?: string): boolean {
+    return validateAccountNumber(value);
+  }
 }

@@ -7,9 +7,12 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@types/jest": "^24.0.13",
     "husky": ">=1",
+    "jest": "^24.8.0",
     "lint-staged": ">=8",
     "prettier": "^1.18.2",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.5.1"
   },
   "dependencies": {
@@ -24,6 +27,7 @@
   },
   "scripts": {
     "start": "node out/app.js",
+    "test": "jest",
     "build": "npx tsc",
     "build:watch": "npx tsc -w"
   },
