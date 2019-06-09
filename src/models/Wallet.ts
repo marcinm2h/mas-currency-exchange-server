@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany
+} from 'typeorm';
+import { Client } from './Client';
+import { Currency } from './Currency';
+import { WalletTransaction } from './WalletTransaction';
 
 @Entity()
 export class Wallet {
@@ -7,4 +16,15 @@ export class Wallet {
 
   @Column()
   balance: number = 0;
+
+  @ManyToOne(type => Client, client => client.wallets)
+  owner: Client;
+
+  @OneToMany(type => Currency, currency => currency.wallets)
+  currency: Currency;
+
+  @OneToMany(type => WalletTransaction, transaction => transaction.wallet, {
+    cascade: true
+  })
+  transactions: WalletTransaction[];
 }

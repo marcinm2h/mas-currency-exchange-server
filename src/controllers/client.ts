@@ -9,6 +9,67 @@ export const listClients = async (
   next: NextFunction
 ) => {
   try {
+    const repository = getRepository(Client);
+    const clients = await repository.find();
+    res.json(clients);
+  } catch (e) {
+    next();
+  }
+};
+
+export const getClient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const repository = getRepository(Client);
+    const results = await repository.findOne(req.params.id);
+    return res.send(results);
+  } catch (e) {
+    next();
+  }
+};
+
+export const createClient = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // const clientRepository = getRepository(Client);
+  // let clients = await clientRepository.find({
+  //   relations: ['identificationDocument']
+  // });
+  // // create a photo
+  // let photo = new Photo();
+  // photo.name = "Me and Bears";
+  // photo.description = "I am near polar bears";
+  // photo.filename = "photo-with-bears.jpg";
+  // photo.isPublished = true;
+
+  // // create a photo metadata
+  // let metadata = new PhotoMetadata();
+  // metadata.height = 640;
+  // metadata.width = 480;
+  // metadata.compressed = true;
+  // metadata.comment = "cybershoot";
+  // metadata.orientation = "portait";
+  // metadata.photo = photo; // this way we connect them
+
+  // // get entity repositories
+  // let photoRepository = connection.getRepository(Photo);
+  // let metadataRepository = connection.getRepository(PhotoMetadata);
+
+  // // first we should save a photo
+  // await photoRepository.save(photo);
+
+  // // photo is saved. Now we need to save a photo metadata
+  // await metadataRepository.save(metadata);
+
+  // // done
+  // console.log("Metadata is saved, and relation between metadata and photo is created in the database too");
+
+  try {
     const clientRepository = getRepository(Client);
     const identificationDocumentRepository = getRepository(
       IdentificationDocument
@@ -38,40 +99,12 @@ export const listClients = async (
   }
   // try {
   //   const repository = getRepository(Client);
-  //   const clients = await repository.find();
-  //   res.json(clients);
+  //   const client = await repository.create(req.body);
+  //   const results = await repository.save(client);
+  //   return res.send(results);
   // } catch (e) {
   //   next();
   // }
-};
-
-export const getClient = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const repository = getRepository(Client);
-    const results = await repository.findOne(req.params.id);
-    return res.send(results);
-  } catch (e) {
-    next();
-  }
-};
-
-export const createClient = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const repository = getRepository(Client);
-    const client = await repository.create(req.body);
-    const results = await repository.save(client);
-    return res.send(results);
-  } catch (e) {
-    next();
-  }
 };
 
 export const updateClient = async (

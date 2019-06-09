@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Client } from './Client';
 
 export type DocumentType = 'passport' | 'id-card';
 
@@ -15,4 +16,7 @@ export class IdentificationDocument {
 
   @Column()
   scannedDocumentUrl: string = '';
+
+  @OneToOne(type => Client, client => client.identificationDocument)
+  owner: Client;
 }

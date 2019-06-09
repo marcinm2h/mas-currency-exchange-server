@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany
+} from 'typeorm';
+import { Wallet } from './Wallet';
+import { Offer } from './abstracts/Offer';
 
 @Entity()
 export class Currency {
@@ -10,4 +18,13 @@ export class Currency {
 
   @Column()
   symbol: string;
+
+  @ManyToOne(type => Wallet, wallet => wallet.currency, { cascade: true })
+  wallets: Wallet[];
+
+  @OneToMany(type => Offer, offer => offer.fromCurrency, { cascade: true })
+  offersFrom: Currency;
+
+  @OneToMany(type => Offer, offer => offer.toCurrency, { cascade: true })
+  offersTo: Currency;
 }

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { PaymentTool } from './abstracts/PaymentTool.abstract';
+import { PaymentTool } from './abstracts/PaymentTool';
 import { validateCreditCardNumber } from '../validators/validateCreditCardNumber';
 
 @Entity()

@@ -10,7 +10,9 @@ import { Currency } from './models/Currency';
 import { IdentificationDocument } from './models/IdentificationDocument';
 import { Moderator } from './models/Moderator';
 import { ModeratorClient } from './models/ModeratorClient';
+import { Offer } from './models/abstracts/Offer';
 import { PaymentOffer } from './models/PaymentOffer';
+import { PaymentTool } from './models/abstracts/PaymentTool';
 import { PurchaseOffer } from './models/PurchaseOffer';
 import { Wallet } from './models/Wallet';
 import { WalletTransaction } from './models/WalletTransaction';
@@ -43,7 +45,9 @@ const options: ConnectionOptions = {
     IdentificationDocument,
     Moderator,
     ModeratorClient,
+    Offer,
     PaymentOffer,
+    PaymentTool,
     PurchaseOffer,
     Wallet,
     WalletTransaction

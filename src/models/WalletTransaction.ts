@@ -2,8 +2,11 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  ManyToOne
 } from 'typeorm';
+import { PaymentTool } from './abstracts/PaymentTool';
+import { Wallet } from './Wallet';
 
 export type TransactionType = 'deposit' | 'withdrawal' | 'ghost';
 export type TransactionState =
@@ -30,4 +33,10 @@ export class WalletTransaction {
   @Column()
   @CreateDateColumn()
   date: Date;
+
+  @ManyToOne(type => PaymentTool, paymentTool => paymentTool.transactions)
+  paymentTool: PaymentTool;
+
+  @ManyToOne(type => Wallet, wallet => wallet.transactions)
+  wallet: Wallet;
 }
