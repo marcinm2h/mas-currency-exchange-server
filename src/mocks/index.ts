@@ -4,6 +4,8 @@ import { Currency } from '../models/Currency';
 import { Wallet } from '../models/Wallet';
 import { IdentificationDocument } from '../models/IdentificationDocument';
 import * as uuid from 'uuid/v4';
+import { PurchaseOffer } from '../models/PurchaseOffer';
+import { SaleOffer } from '../models/SaleOffer';
 
 async function mockClient(
   {
@@ -87,9 +89,8 @@ async function mockCurrencies() {
   return currencies;
 }
 
-export async function mockClients() {
-  const currencies = await mockCurrencies();
-  const clients = [];
+export async function mockClients(currencies: Currency[]) {
+  const clients: Client[] = [];
   clients.push(
     await mockClient(
       {
@@ -134,4 +135,98 @@ export async function mockClients() {
   );
 
   return clients;
+}
+
+export async function mockPurchaseOffer({
+  owner,
+  participant,
+  fromCurrency,
+  fromAmount,
+  toCurrency,
+  toAmount
+}: {
+  owner: Client;
+  participant?: Client;
+  fromCurrency: Currency;
+  fromAmount: number;
+  toCurrency: Currency;
+  toAmount: number;
+}) {
+  const offer = new PurchaseOffer();
+  offer.owner = owner;
+  if (participant) {
+    offer.status = 'completed';
+    offer.participant = participant;
+  }
+  offer.fromCurrency = fromCurrency;
+  offer.fromAmount = fromAmount;
+  offer.toCurrency = toCurrency;
+  offer.toAmount = toAmount;
+
+  const offerRepository = getRepository(PurchaseOffer);
+  offerRepository.save(offer);
+}
+
+export async function mockSaleOffer({
+  participant,
+  owner,
+  fromCurrency,
+  fromAmount,
+  toCurrency,
+  toAmount
+}: {
+  owner: Client;
+  participant?: Client;
+  fromCurrency: Currency;
+  fromAmount: number;
+  toCurrency: Currency;
+  toAmount: number;
+}) {
+  const offer = new SaleOffer();
+  offer.owner = owner;
+  if (participant) {
+    offer.status = 'completed';
+    offer.participant = participant;
+  }
+  offer.fromCurrency = fromCurrency;
+  offer.fromAmount = fromAmount;
+  offer.toCurrency = toCurrency;
+  offer.toAmount = toAmount;
+
+  const offerRepository = getRepository(SaleOffer);
+  offerRepository.save(offer);
+}
+
+export async function mock() {
+  const currencies = await mockCurrencies();
+  const clients = await mockClients(currencies);
+  await mockPurchaseOffer({
+    owner: clients[0],
+    fromAmount: 100,
+    fromCurrency: currencies.find(currency => currency.symbol === 'PLN'),
+    toAmount: 200,
+    toCurrency: currencies.find(currency => currency.symbol === 'RUB')
+  });
+  await mockPurchaseOffer({
+    owner: clients[1],
+    fromAmount: 200,
+    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+    toAmount: 300,
+    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  });
+  await mockSaleOffer({
+    owner: clients[1],
+    fromAmount: 200,
+    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+    toAmount: 300,
+    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  });
+  await mockSaleOffer({
+    owner: clients[1],
+    participant: clients[0],
+    fromAmount: 250,
+    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+    toAmount: 1000,
+    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  });
 }

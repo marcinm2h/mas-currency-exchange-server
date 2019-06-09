@@ -11,12 +11,12 @@ import { IdentificationDocument } from './models/IdentificationDocument';
 import { Moderator } from './models/Moderator';
 import { ModeratorClient } from './models/ModeratorClient';
 import { Offer } from './models/abstracts/Offer';
-import { PaymentOffer } from './models/PaymentOffer';
+import { SaleOffer } from './models/SaleOffer';
 import { PaymentTool } from './models/abstracts/PaymentTool';
 import { PurchaseOffer } from './models/PurchaseOffer';
 import { Wallet } from './models/Wallet';
 import { WalletTransaction } from './models/WalletTransaction';
-import { mockClients } from './mocks';
+import { mock } from './mocks';
 
 const requestLogger = () => (
   req: express.Request,
@@ -47,7 +47,7 @@ const options: ConnectionOptions = {
     Moderator,
     ModeratorClient,
     Offer,
-    PaymentOffer,
+    SaleOffer,
     PaymentTool,
     PurchaseOffer,
     Wallet,
@@ -58,7 +58,7 @@ const options: ConnectionOptions = {
 };
 
 createConnection(options).then(async connection => {
-  await mockClients();
+  await mock();
   const app = express();
   app.use(bodyParser.json());
   app.use(requestLogger());

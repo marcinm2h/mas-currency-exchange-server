@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Offer } from './abstracts/Offer';
 
 @Entity()
-export class PaymentOffer extends Offer {
+export class SaleOffer extends Offer {
   @PrimaryGeneratedColumn()
   id: number;
 

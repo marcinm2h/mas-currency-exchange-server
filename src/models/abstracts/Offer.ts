@@ -12,17 +12,23 @@ export abstract class Offer {
   @Column()
   status: OfferStatus = 'new';
 
+  @Column()
+  fromAmount: number;
+
+  @Column()
+  toAmount: number;
+
   @ManyToOne(type => Currency, currency => currency.offersFrom)
   fromCurrency: Currency;
 
   @ManyToOne(type => Currency, currency => currency.offersTo)
   toCurrency: Currency;
 
-  @ManyToOne(type => Client, client => client.sellOffers)
-  seller: Client;
+  @ManyToOne(type => Client, client => client.participatedOffers)
+  participant: Client;
 
-  @ManyToOne(type => Client, client => client.buyOffers)
-  buyer: Client;
+  @ManyToOne(type => Client, client => client.ownOffers)
+  owner: Client;
 
   static issuingComission: number = 0.01;
 

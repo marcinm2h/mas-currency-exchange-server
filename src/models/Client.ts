@@ -57,11 +57,11 @@ export class Client implements IUser {
   })
   paymentTools: PaymentTool[];
 
-  @OneToMany(type => Offer, offer => offer.seller, { cascade: true })
-  sellOffers: Offer[];
+  @OneToMany(type => Offer, offer => offer.participant, { cascade: true })
+  participatedOffers: Offer[];
 
-  @OneToMany(type => Offer, offer => offer.buyer, { cascade: true })
-  buyOffers: Offer[];
+  @OneToMany(type => Offer, offer => offer.owner, { cascade: true })
+  ownOffers: Offer[];
 
   static minimalAge: number = 18;
 
