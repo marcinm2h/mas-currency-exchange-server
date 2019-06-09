@@ -1,4 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn
+} from 'typeorm';
 
 export type TransactionType = 'deposit' | 'withdrawal' | 'ghost';
 export type TransactionState =
@@ -23,5 +28,6 @@ export class WalletTransaction {
   state: TransactionState;
 
   @Column()
+  @CreateDateColumn()
   date: Date;
 }

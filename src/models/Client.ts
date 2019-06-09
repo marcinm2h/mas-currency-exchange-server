@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn
+} from 'typeorm';
 import { IUser } from './abstracts/IUser';
+import { IdentificationDocument } from './IdentificationDocument';
 
 @Entity()
 export class Client implements IUser {
@@ -24,11 +31,15 @@ export class Client implements IUser {
   @Column()
   PESEL: string;
 
-  @Column()
+  @Column({ nullable: true })
   mail: string;
 
-  @Column()
+  @Column({ nullable: true })
   contactAddress: string;
+
+  @OneToOne(type => IdentificationDocument)
+  @JoinColumn()
+  identificationDocument: IdentificationDocument;
 
   static minimalAge: number = 18;
 

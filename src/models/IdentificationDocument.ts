@@ -14,5 +14,5 @@ export class IdentificationDocument {
   type: DocumentType;
 
   @Column()
-  scannedDocumentUrl: string;
+  scannedDocumentUrl: string = '';
 }

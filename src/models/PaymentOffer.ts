@@ -7,5 +7,5 @@ export class PaymentOffer extends Offer {
   id: number;
 
   @Column()
-  completionComission: number;
+  completionComission: number = 0.01;
 }

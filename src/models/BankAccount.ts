@@ -7,10 +7,10 @@ export class BankAccount extends PaymentTool {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   bankCode: string;
 
-  @Column()
+  @Column({ nullable: true })
   bankName: string;
 
   validate(value?: string): boolean {

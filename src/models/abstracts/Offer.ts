@@ -4,9 +4,9 @@ export type OfferStatus = 'new' | 'rejected' | 'completed' | 'archived';
 
 export abstract class Offer {
   @Column()
-  status: OfferStatus;
+  status: OfferStatus = 'new';
 
-  static issuingComission: number;
+  static issuingComission: number = 0.01;
 
   // wyświetl()
   // oblicz koszt dodania()

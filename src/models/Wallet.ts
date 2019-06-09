@@ -6,5 +6,5 @@ export class Wallet {
   id: number;
 
   @Column()
-  balance: string;
+  balance: number = 0;
 }
