@@ -15,6 +15,23 @@ import { PurchaseOffer } from './models/PurchaseOffer';
 import { Wallet } from './models/Wallet';
 import { WalletTransaction } from './models/WalletTransaction';
 
+const requestLogger = () => (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  const { method, body, params, url } = req;
+  console.log(
+    `[REQUEST] ${url}`,
+    JSON.stringify({
+      method,
+      body,
+      params
+    })
+  );
+  next();
+};
+
 const options: ConnectionOptions = {
   type: 'sqlite',
   database: `${root}/db.sqlite`,
@@ -38,10 +55,8 @@ const options: ConnectionOptions = {
 createConnection(options).then(connection => {
   const app = express();
   app.use(bodyParser.json());
-
+  app.use(requestLogger());
   app.use(routes);
-
   app.listen(3000);
-
   console.log('Server is running at 3000');
 });
