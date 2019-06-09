@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Offer } from './abstracts/Offer.abstract';
+import { Offer } from './abstracts/Offer';
 
 @Entity()
 export class PaymentOffer extends Offer {

@@ -1,12 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { IUser } from './abstracts/IUser';
 
 @Entity()
-export class Client {
+export class Client implements IUser {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   login: string;
+
+  @Column()
+  password: string;
 
   @Column()
   firstName: string;
