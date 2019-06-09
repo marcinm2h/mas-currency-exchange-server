@@ -16,6 +16,7 @@ import { PaymentTool } from './models/abstracts/PaymentTool';
 import { PurchaseOffer } from './models/PurchaseOffer';
 import { Wallet } from './models/Wallet';
 import { WalletTransaction } from './models/WalletTransaction';
+import { mockClients } from './mocks';
 
 const requestLogger = () => (
   req: express.Request,
@@ -56,7 +57,8 @@ const options: ConnectionOptions = {
   logging: true
 };
 
-createConnection(options).then(connection => {
+createConnection(options).then(async connection => {
+  await mockClients();
   const app = express();
   app.use(bodyParser.json());
   app.use(requestLogger());

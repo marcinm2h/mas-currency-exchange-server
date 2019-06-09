@@ -23,7 +23,8 @@
     "global": "^4.3.2",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^4.0.8",
-    "typeorm": "^0.2.18"
+    "typeorm": "^0.2.18",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "node out/app.js",
