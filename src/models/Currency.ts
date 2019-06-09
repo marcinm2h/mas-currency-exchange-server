@@ -19,7 +19,7 @@ export class Currency {
   @Column()
   symbol: string;
 
-  @ManyToOne(type => Wallet, wallet => wallet.currency, { cascade: true })
+  @OneToMany(type => Wallet, wallet => wallet.currency, { cascade: true })
   wallets: Wallet[];
 
   @OneToMany(type => Offer, offer => offer.fromCurrency, { cascade: true })

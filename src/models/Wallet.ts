@@ -20,7 +20,7 @@ export class Wallet {
   @ManyToOne(type => Client, client => client.wallets)
   owner: Client;
 
-  @OneToMany(type => Currency, currency => currency.wallets)
+  @ManyToOne(type => Currency, currency => currency.wallets)
   currency: Currency;
 
   @OneToMany(type => WalletTransaction, transaction => transaction.wallet, {

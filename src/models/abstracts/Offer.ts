@@ -26,7 +26,7 @@ export abstract class Offer {
 
   static issuingComission: number = 0.01;
 
-  // wyświetl()
-  // oblicz koszt dodania()
-  // wylistuj oferty()
+  // wyświetl() //TODO:
+  // oblicz koszt dodania() //TODO:
+  // wylistuj oferty() //TODO:
 }

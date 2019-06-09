@@ -1,7 +1,7 @@
 export interface IModerator {
   login: string;
 
-  // usuń ofertę()
-  // zablokuj użytkownika()
-  // odblokuj użytkownika()
+  // usuń ofertę() //mock?
+  // zablokuj użytkownika() //mock?
+  // odblokuj użytkownika() //mock?
 }
