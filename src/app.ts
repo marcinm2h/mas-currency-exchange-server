@@ -36,6 +36,16 @@ const requestLogger = () => (
   next();
 };
 
+const errorHandler = () => (
+  err: Error,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  console.log(err);
+  next();
+};
+
 const connectionOptions: ConnectionOptions = {
   type: 'sqlite',
   database: DB_PATH,
@@ -78,6 +88,7 @@ createConnection(connectionOptions).then(async connection => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(requestLogger());
   app.use(routes);
+  app.use(errorHandler());
   app.listen(3000);
   console.log('Server is running at 3000');
 });

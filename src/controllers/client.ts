@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Client } from '../models/Client';
 import { IdDocument } from '../models/IdDocument';
+import { Currency } from '../models/Currency';
+import { Wallet } from '../models/Wallet';
 
 export const listClients = async (
   req: Request,
@@ -10,10 +12,10 @@ export const listClients = async (
 ) => {
   try {
     const clientRepository = getRepository(Client);
-    const clients = await clientRepository.find();
+    const clients = await clientRepository.find({ relations: ['wallets'] }); // FIXME: no wallets
     res.json(clients);
   } catch (e) {
-    next();
+    next(e);
   }
 };
 
@@ -27,7 +29,7 @@ export const getClient = async (
     const results = await clientRepository.findOne(req.params.id);
     return res.send(results);
   } catch (e) {
-    next();
+    next(e);
   }
 };
 
@@ -39,26 +41,42 @@ export const createClient = async (
   try {
     const {
       login,
+      password,
       firstName,
       lastName,
       PESEL,
-      password,
-      contactAddress
+      contactAddress,
+      birthday
     } = req.body;
 
     const clientRepository = getRepository(Client);
     const client = new Client();
     client.login = login;
+    client.password = password;
     client.firstName = firstName;
     client.lastName = lastName;
     client.PESEL = PESEL;
-    client.password = password;
     client.contactAddress = contactAddress;
+    client.birthday = new Date(birthday);
+
     const results = await clientRepository.save(client);
+
+    const currencyRepository = getRepository(Currency);
+    const currencies = await currencyRepository.find();
+
+    const wallets = currencies.map(currency => {
+      const wallet = new Wallet();
+      wallet.balance = 0;
+      wallet.currency = currency;
+      wallet.owner = client;
+      return wallet;
+    });
+    const walletRepository = getRepository(Wallet);
+    await walletRepository.save(wallets);
 
     return res.send(results);
   } catch (e) {
-    next();
+    next(e);
   }
 };
 
@@ -84,6 +102,6 @@ export const createIdDocument = async (
 
     return res.send(results);
   } catch (e) {
-    next();
+    next(e);
   }
 };
