@@ -32,7 +32,8 @@
     "start": "node out/app.js",
     "test": "jest",
     "build": "npx tsc",
-    "build:watch": "npx tsc -w"
+    "build:watch": "npx tsc -w",
+    "clear:db": "rm db.sqlite -f && cp db.empty.sqlite db.sqlite"
   },
   "husky": {
     "hooks": {
