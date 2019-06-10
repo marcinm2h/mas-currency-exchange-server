@@ -4,7 +4,7 @@ import { Client } from './Client';
 export type DocumentType = 'passport' | 'id-card';
 
 @Entity()
-export class IdentificationDocument {
+export class IdDocument {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,6 +17,6 @@ export class IdentificationDocument {
   @Column()
   scannedDocumentUrl: string = '';
 
-  @OneToOne(type => Client, client => client.identificationDocument)
+  @OneToOne(type => Client, client => client.idDocument)
   owner: Client;
 }

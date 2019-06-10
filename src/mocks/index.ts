@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import { Client } from '../models/Client';
 import { Currency } from '../models/Currency';
 import { Wallet } from '../models/Wallet';
-import { IdentificationDocument } from '../models/IdentificationDocument';
+import { IdDocument } from '../models/IdDocument';
 import * as uuid from 'uuid/v4';
 import { PurchaseOffer } from '../models/PurchaseOffer';
 import { SaleOffer } from '../models/SaleOffer';
@@ -37,10 +37,10 @@ async function mockClient(
   const walletRepository = getRepository(Wallet);
   await walletRepository.save(wallets);
 
-  const identificationDocument = new IdentificationDocument();
-  identificationDocument.type = Math.random() > 0.5 ? 'id-card' : 'passport';
-  identificationDocument.idNumber = uuid().substring(0, 6);
-  identificationDocument.scannedDocumentUrl = `${identificationDocument.idNumber}.jpg`;
+  const idDocument = new IdDocument();
+  idDocument.type = Math.random() > 0.5 ? 'id-card' : 'passport';
+  idDocument.idNumber = uuid().substring(0, 6);
+  idDocument.scannedDocumentUrl = `${idDocument.idNumber}.jpg`;
 
   const client = new Client();
   client.login = login;
@@ -57,13 +57,11 @@ async function mockClient(
   });
   client.wallets = wallets;
 
-  const identificationDocumentRepository = getRepository(
-    IdentificationDocument
-  );
-  await identificationDocumentRepository.save(identificationDocument);
+  const idDocumentRepository = getRepository(IdDocument);
+  await idDocumentRepository.save(idDocument);
 
-  identificationDocument.owner = client;
-  client.identificationDocument = identificationDocument;
+  idDocument.owner = client;
+  client.idDocument = idDocument;
 
   const clientRepository = getRepository(Client);
   await clientRepository.save(client);

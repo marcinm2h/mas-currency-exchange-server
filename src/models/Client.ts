@@ -7,7 +7,7 @@ import {
   OneToMany
 } from 'typeorm';
 import { IUser } from './abstracts/IUser';
-import { IdentificationDocument } from './IdentificationDocument';
+import { IdDocument } from './IdDocument';
 import { Wallet } from './Wallet';
 import { PaymentTool } from './abstracts/PaymentTool';
 import { Offer } from './abstracts/Offer';
@@ -42,12 +42,12 @@ export class Client implements IUser {
   contactAddress: string;
 
   @OneToOne(
-    type => IdentificationDocument,
-    identificationDocument => identificationDocument.owner, //bi-directional
+    type => IdDocument,
+    idDocument => idDocument.owner, //bi-directional
     { cascade: true } //save/delete/update both on save/delete/update client
   )
   @JoinColumn()
-  identificationDocument: IdentificationDocument;
+  idDocument: IdDocument;
 
   @OneToMany(type => Wallet, wallet => wallet.owner, { cascade: true })
   wallets: Wallet[];

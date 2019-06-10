@@ -8,7 +8,7 @@ import { BankAccount } from './models/BankAccount';
 import { Client } from './models/Client';
 import { CreditCard } from './models/CreditCard';
 import { Currency } from './models/Currency';
-import { IdentificationDocument } from './models/IdentificationDocument';
+import { IdDocument } from './models/IdDocument';
 import { Moderator } from './models/Moderator';
 import { ModeratorClient } from './models/ModeratorClient';
 import { Offer } from './models/abstracts/Offer';
@@ -44,7 +44,7 @@ const connectionOptions: ConnectionOptions = {
     Client,
     CreditCard,
     Currency,
-    IdentificationDocument,
+    IdDocument,
     Moderator,
     ModeratorClient,
     Offer,

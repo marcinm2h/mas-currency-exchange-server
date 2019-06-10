@@ -3,8 +3,7 @@ import {
   listClients,
   getClient,
   createClient,
-  updateClient,
-  deleteClient
+  createIdDocument
 } from '../../controllers/client';
 
 const router = Router();
@@ -15,8 +14,6 @@ router.get('/clients/:id', getClient);
 
 router.post('/clients', createClient);
 
-router.put('/clients/:id', updateClient);
-
-router.delete('/clients/:id', deleteClient);
+router.post('/clients/:id/create-id-document', createIdDocument);
 
 export { router as clients };
