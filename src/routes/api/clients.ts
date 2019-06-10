@@ -6,7 +6,7 @@ import {
   createIdDocument,
   login,
   logout
-} from '../../controllers/client';
+} from '../../controllers/clients';
 import { auth } from '../auth';
 
 const router = Router();

@@ -3,11 +3,15 @@ import { Currency } from '../Currency';
 import { Client } from '../Client';
 
 export type OfferStatus = 'new' | 'rejected' | 'completed' | 'archived';
+export type OfferType = 'purchase' | 'sale';
 
 @Entity()
 export abstract class Offer {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  type: OfferType;
 
   @Column()
   status: OfferStatus = 'new';
@@ -30,9 +34,5 @@ export abstract class Offer {
   @ManyToOne(type => Client, client => client.ownOffers)
   owner: Client;
 
-  static issuingComission: number = 0.01;
-
-  // wyświetl() //TODO:
-  // oblicz koszt dodania() //TODO:
-  // wylistuj oferty() //TODO:
+  static issuingComission: number = 0.0;
 }

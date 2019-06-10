@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Offer } from './abstracts/Offer';
+import { Offer, OfferType } from './abstracts/Offer';
 
 @Entity()
 export class PurchaseOffer extends Offer {
@@ -7,5 +7,8 @@ export class PurchaseOffer extends Offer {
   id: number;
 
   @Column()
-  completionComission: number = 0.01;
+  type: OfferType = 'purchase';
+
+  @Column()
+  completionComission: number = 0.0;
 }

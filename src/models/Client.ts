@@ -64,12 +64,4 @@ export class Client implements IUser {
   ownOffers: Offer[];
 
   static minimalAge: number = 18;
-
-  // dodaj ofertę() //TODO:
-  // zaakceptuj ofertę() //TODO:
-  // usuń ofertę () //TODO:
-  // wpłać środki() //mock?
-  // wypłać środki() //mock?
-  // dodaj narzędzie płatności() //mock?
-  // usuń narzędzie płatnośći() //mock?
 }

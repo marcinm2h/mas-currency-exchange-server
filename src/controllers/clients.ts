@@ -60,7 +60,7 @@ export const register = async (
     req.session.userId = results.id;
     req.session.login = results.login;
 
-    return res.send(results);
+    return res.json({ data: results });
   } catch (e) {
     next(e);
   }
@@ -80,7 +80,7 @@ export const login = async (
         req.session.userId = client.id;
         req.session.login = login;
 
-        return res.send({});
+        return res.json({ data: {} });
       }
       throw new Error('Wrong login or password'); //FIXME: error_codes
     }
@@ -108,7 +108,9 @@ export const listClients = async (
   try {
     const clientRepository = getRepository(Client);
     const clients = await clientRepository.find({ relations: ['wallets'] }); // FIXME: no wallets
-    res.json(clients);
+    res.json({
+      data: clients.map(({ password, ...client }) => client)
+    });
   } catch (e) {
     next(e);
   }
@@ -120,9 +122,10 @@ export const getClient = async (
   next: NextFunction
 ) => {
   try {
+    const { id: clientId } = req.params;
     const clientRepository = getRepository(Client);
-    const results = await clientRepository.findOne(req.params.id);
-    return res.send(results);
+    const results = await clientRepository.findOne(clientId);
+    return res.json({ data: results });
   } catch (e) {
     next(e);
   }
@@ -140,15 +143,14 @@ export const createIdDocument = async (
     const clientRepository = getRepository(Client);
     const client = await clientRepository.findOne(clientId);
     const idDocumentRepository = getRepository(IdDocument);
-    const idDocument = await idDocumentRepository.create({
-      idNumber,
-      type,
-      scannedDocumentUrl
-    });
+    const idDocument = new IdDocument();
+    idDocument.idNumber = idNumber;
+    idDocument.type = type;
+    idDocument.scannedDocumentUrl = scannedDocumentUrl;
     client.idDocument = idDocument;
     const results = await idDocumentRepository.save(idDocument);
 
-    return res.send(results);
+    return res.json({ data: results });
   } catch (e) {
     next(e);
   }
