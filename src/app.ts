@@ -43,7 +43,9 @@ const errorHandler = () => (
   next: express.NextFunction
 ) => {
   console.log(err);
-  next();
+  return res.send({
+    error: err.message
+  });
 };
 
 const connectionOptions: ConnectionOptions = {

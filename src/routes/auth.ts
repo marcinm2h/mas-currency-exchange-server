@@ -3,8 +3,9 @@ import { NextFunction, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Client } from '../models/Client';
 import { SESSION_NAME } from '../env';
+import { login } from '../controllers/client';
 
-interface Request extends express.Request {
+export interface Request extends express.Request {
   session: {
     userId: number;
     login: string;
@@ -14,6 +15,7 @@ interface Request extends express.Request {
 
 export const auth = {
   required: (req: Request, res: Response, next: NextFunction) => {
+    return next(); //FIXME: tyko dewelopersko!
     if (!req.session.userId) {
       return res.sendStatus(401);
     }
@@ -31,7 +33,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 
   res.send(`
     <h1>Hi! ${login}</h1>
-    <form method="post" action="/api/logout">
+    <form method="post" action="/api/clients-logout">
       <button>logout</button>
     </form>
   `);
@@ -40,80 +42,48 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
 router.get('/login', (req: Request, res: Response, next: NextFunction) => {
   res.send(`
   <h1>login</h1>
-  <form method="post" action="/api/login">
+  <form method="post" action="/api/clients-login">
     <input type="text" name="login" placeholder="login" required />
     <input type="password" name="password" placeholder="password" required />
     <input type="submit" />
   </form>
   `);
 });
-
-router.post(
-  '/api/login',
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { login, password } = req.body;
-    if (login && password) {
-      const clientRepository = getRepository(Client); //FIXME: clientController.login({ login, password })
-      const client = await clientRepository.findOne({ login, password }); //TODO: password hashing
-      if (client) {
-        req.session.userId = client.id;
-        req.session.login = login;
-        return res.redirect('/');
-      }
-      return res.send({ error: 'Wrong login or password' }); //FIXME: error_codes
-    }
-    return res.send({ error: 'Type in login and password' }); //FIXME: error_codes
-  }
-);
 
 router.get('/register', (req: Request, res: Response, next: NextFunction) => {
   res.send(`
   <h1>register</h1>
-  <form method="post" action="/api/register">
-    <input type="text" name="login" placeholder="login" required />
-    <input type="password" name="password" placeholder="password" required />
+  <form method="post" action="/api/clients-register">
+    <label>login:
+      <input type="text" name="login" placeholder="login" required />
+    </label>
+    <br />
+    <label>password:
+      <input type="password" name="password" placeholder="password" required />
+    </label>
+    <br />
+    <label>firstName:
+      <input type="text" name="firstName" placeholder="firstName" required />
+    </label>
+    <br />
+    <label>lastName:
+      <input type="text" name="lastName" placeholder="lastName" required />
+    </label>
+    <br />
+    <label>PESEL:
+      <input type="text" name="PESEL" placeholder="PESEL" required />
+    </label>
+    <br />
+    <label>birthday:
+      <input type="date" name="birthday" placeholder="birthday" required />
+    </label>
+    <br />
+    <label>mail:
+      <input type="mail" name="mail" placeholder="mail" required />
+    </label>
     <input type="submit" />
   </form>
   `);
-});
-
-router.post(
-  '/api/register',
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { login, password } = req.body;
-    if (login && password) {
-      const clientRepository = getRepository(Client); //FIXME: clientController.checkLogin({ login, password })
-      const loginInUse = Boolean(await clientRepository.findOne({ login })); //TODO: password hashing
-      if (loginInUse) {
-        return res.send({
-          error: 'Login already in use. Choose another login.'
-        }); //FIXME: error_codes
-      }
-      const client = new Client();
-      client.login = login;
-      client.password = password;
-      client.firstName = '';
-      client.lastName = '';
-      client.birthday = new Date();
-      client.PESEL = '';
-      client.mail = '';
-      client.contactAddress = '';
-      const result = await clientRepository.save(client);
-      req.session.userId = result.id;
-      req.session.login = result.login; //setSessiotn();
-      return res.redirect('/');
-    }
-  }
-);
-
-router.post('/api/logout', auth.required, (req: Request, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      return res.redirect('/');
-    }
-    res.clearCookie(SESSION_NAME);
-    res.redirect('/');
-  });
 });
 
 export { router as authRoutes };

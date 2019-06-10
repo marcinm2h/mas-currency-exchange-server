@@ -2,18 +2,25 @@ import { Router } from 'express';
 import {
   listClients,
   getClient,
-  createClient,
-  createIdDocument
+  register,
+  createIdDocument,
+  login,
+  logout
 } from '../../controllers/client';
+import { auth } from '../auth';
 
 const router = Router();
 
-router.get('/clients', listClients);
+router.post('/clients-register', register);
 
-router.get('/clients/:id', getClient);
+router.post('/clients-login', login);
 
-router.post('/clients', createClient);
+router.post('/clients-logout', auth.required, logout);
 
-router.post('/clients/:id/create-id-document', createIdDocument);
+router.get('/clients', auth.required, listClients);
+
+router.get('/clients/:id', auth.required, getClient);
+
+router.post('/clients/:id/create-id-document', auth.required, createIdDocument);
 
 export { router as clients };
