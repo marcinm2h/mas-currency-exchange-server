@@ -80,7 +80,17 @@ export const login = async (
         req.session.userId = client.id;
         req.session.login = login;
 
-        return res.json({ data: {} });
+        return res.json({
+          data: {
+            sid: req.sessionID,
+            clientInfo: {
+              clientId: client.id,
+              login: client.login,
+              firstName: client.firstName,
+              lastName: client.lastName
+            }
+          }
+        });
       }
       throw new Error('Wrong login or password'); //FIXME: error_codes
     }
@@ -91,12 +101,9 @@ export const login = async (
 };
 
 export const logout = (req: Request, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      return res.redirect('/');
-    }
+  req.session.destroy(() => {
     res.clearCookie(SESSION_NAME);
-    res.redirect('/');
+    return res.json({ data: {} });
   });
 };
 

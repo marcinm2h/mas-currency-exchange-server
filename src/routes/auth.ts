@@ -6,6 +6,7 @@ import { SESSION_NAME } from '../env';
 import { login } from '../controllers/clients';
 
 export interface Request extends express.Request {
+  sessionID: string;
   session: {
     userId: number;
     login: string;
