@@ -6,7 +6,9 @@ import {
   getPurchaseOffer,
   deleteOffer,
   acceptOffer,
-  getSaleOffer
+  getSaleOffer,
+  listPurchaseOffers,
+  listSaleOffers
 } from '../../controllers/offers';
 
 const router = Router();
@@ -14,6 +16,10 @@ const router = Router();
 router.post('/offers', auth.required, createOffer);
 
 router.get('/offers', auth.required, listOffers);
+
+router.get('/offers/purchase', auth.required, listPurchaseOffers);
+
+router.get('/offers/sale', auth.required, listSaleOffers);
 
 router.get('/offers/purchase/:id', auth.required, getPurchaseOffer);
 

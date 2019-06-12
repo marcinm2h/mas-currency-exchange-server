@@ -76,6 +76,48 @@ export const listOffers = async (
   }
 };
 
+export const listPurchaseOffers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { status } = req.query;
+    const purchasefferRepository = getRepository(PurchaseOffer);
+    const purchaseOffers = await purchasefferRepository.find({
+      relations: ['fromCurrency', 'toCurrency', 'participant', 'owner'],
+      where: { status }
+    });
+
+    res.json({
+      data: purchaseOffers
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export const listSaleOffers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { status } = req.query;
+    const saleOfferRepository = getRepository(SaleOffer);
+    const saleOffers = await saleOfferRepository.find({
+      relations: ['fromCurrency', 'toCurrency', 'participant', 'owner'],
+      where: { status }
+    });
+
+    res.json({
+      data: saleOffers
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const getPurchaseOffer = async (
   req: Request,
   res: Response,
@@ -196,16 +238,16 @@ export const acceptOffer = async (
     });
 
     const ownerOfferWalletFromCurrency = ownerWallets.find(
-      wallet => wallet.currency === offer.fromCurrency
+      wallet => wallet.currency.id === offer.fromCurrency.id
     );
     const ownerOfferWalletToCurrency = ownerWallets.find(
-      wallet => wallet.currency === offer.toCurrency
+      wallet => wallet.currency.id === offer.toCurrency.id
     );
     const participantOfferWalletFromCurrency = participantWallets.find(
-      wallet => wallet.currency === offer.fromCurrency
+      wallet => wallet.currency.id === offer.fromCurrency.id
     );
     const participantOfferWalletToCurrency = participantWallets.find(
-      wallet => wallet.currency === offer.toCurrency
+      wallet => wallet.currency.id === offer.toCurrency.id
     );
 
     if (offer.type === 'purchase') {
