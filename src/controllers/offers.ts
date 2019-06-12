@@ -29,11 +29,27 @@ export const createOffer = async (
       toAmount: number;
       toCurrencyId: number;
     } = req.body;
+
+    if (fromCurrencyId === toCurrencyId) {
+      throw new Error('From currency can not be same as to currency');
+    }
+    if (fromAmount < 1 || toAmount < 1) {
+      throw new Error('Min offer amount is 1');
+    }
     const repository = getRepository(
       type === 'purchase' ? PurchaseOffer : SaleOffer
     );
     const clientRepository = getRepository(Client);
-    const owner = await clientRepository.findOne(userId);
+    const owner = await clientRepository.findOne(userId, {
+      relations: ['wallets']
+    });
+    const ownerOfferWalletFromCurrency = owner.wallets.find(
+      wallet => wallet.currency.id === offer.fromCurrency.id
+    );
+    if (ownerOfferWalletFromCurrency.balance < fromAmount) {
+      throw new Error('Insuffcient funds');
+    }
+
     const currencyRepository = getRepository(Currency);
     const fromCurrency = await currencyRepository.findOne(fromCurrencyId);
     const toCurrency = await currencyRepository.findOne(toCurrencyId);
@@ -45,8 +61,10 @@ export const createOffer = async (
       toCurrency
     });
 
+    const response = repository.save(offer);
+
     res.json({
-      data: offer
+      data: response
     });
   } catch (e) {
     next(e);
