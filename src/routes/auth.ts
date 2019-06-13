@@ -1,9 +1,5 @@
 import * as express from 'express';
 import { NextFunction, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { Client } from '../models/Client';
-import { SESSION_NAME } from '../env';
-import { login } from '../controllers/clients';
 
 export interface Request extends express.Request {
   sessionID: string;

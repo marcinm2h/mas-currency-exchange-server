@@ -41,10 +41,10 @@ export const createOffer = async (
     );
     const clientRepository = getRepository(Client);
     const owner = await clientRepository.findOne(userId, {
-      relations: ['wallets']
+      relations: ['wallets', 'wallets.currency']
     });
     const ownerOfferWalletFromCurrency = owner.wallets.find(
-      wallet => wallet.currency.id === offer.fromCurrency.id
+      wallet => wallet.currency.id === fromCurrencyId
     );
     if (ownerOfferWalletFromCurrency.balance < fromAmount) {
       throw new Error('Insuffcient funds');
@@ -176,39 +176,6 @@ export const getSaleOffer = async (
   }
 };
 
-//FIXME: przenieść do user
-export const deleteOffer = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { userId } = req.session;
-    const {
-      type,
-      offerId
-    }: {
-      type: OfferType;
-      offerId: number;
-    } = req.body;
-    const repository = getRepository(
-      type === 'purchase' ? PurchaseOffer : SaleOffer
-    );
-    const offer = await repository.findOne(offerId, { relations: ['owner'] });
-    if (offer.owner.id !== userId) {
-      throw new Error("User can not delete other users' offers");
-    }
-    const response = await repository.delete(offerId);
-
-    res.json({
-      data: response
-    });
-  } catch (e) {
-    next(e);
-  }
-};
-
-//FIXME: przenieść do user
 export const acceptOffer = async (
   req: Request,
   res: Response,

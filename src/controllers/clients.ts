@@ -123,6 +123,23 @@ export const listClients = async (
   }
 };
 
+export const getWallets = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.session;
+    const clientRepository = getRepository(Client);
+    const results = await clientRepository.findOne(userId, {
+      relations: ['wallets', 'wallets.currency']
+    });
+    return res.json({ data: results.wallets });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const getClient = async (
   req: Request,
   res: Response,

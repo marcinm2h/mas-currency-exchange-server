@@ -32,6 +32,7 @@ async function mockClient(
   const wallets = currencies.map(currency => {
     const wallet = new Wallet();
     wallet.currency = currency;
+    wallet.balance = parseFloat((Math.random() * 100000).toFixed(2));
     return wallet;
   });
   const walletRepository = getRepository(Wallet);
