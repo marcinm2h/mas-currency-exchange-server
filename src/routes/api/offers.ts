@@ -4,7 +4,6 @@ import {
   createOffer,
   listOffers,
   getPurchaseOffer,
-  deleteOffer,
   acceptOffer,
   getSaleOffer,
   listPurchaseOffers,
@@ -24,8 +23,6 @@ router.get('/offers/sale', auth.required, listSaleOffers);
 router.get('/offers/purchase/:id', auth.required, getPurchaseOffer);
 
 router.get('/offers/sale/:id', auth.required, getSaleOffer);
-
-router.delete('/offers/:id', auth.required, deleteOffer);
 
 router.post('/offers/:id', auth.required, acceptOffer);
 
