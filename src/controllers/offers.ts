@@ -29,7 +29,6 @@ export const createOffer = async (
       toAmount: number;
       toCurrencyId: number;
     } = req.body;
-    debugger;
     if (fromCurrencyId === toCurrencyId) {
       throw new Error('From currency can not be same as to currency');
     }
@@ -183,13 +182,8 @@ export const acceptOffer = async (
 ) => {
   try {
     const { userId } = req.session;
-    const {
-      type,
-      offerId
-    }: {
-      type: OfferType;
-      offerId: number;
-    } = req.body;
+    const { id: offerId } = req.params;
+    const { type }: { type: OfferType } = req.body;
     const offerRepository = getRepository(
       type === 'purchase' ? PurchaseOffer : SaleOffer
     );

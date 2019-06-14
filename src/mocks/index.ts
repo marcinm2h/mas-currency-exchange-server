@@ -107,7 +107,7 @@ export async function mockClients(currencies: Currency[]) {
   clients.push(
     await mockClient(
       {
-        login: 'client02',
+        login: 'janusz',
         password: 'pw',
         firstName: 'Janusz',
         lastName: 'Januszewicz',
@@ -121,10 +121,10 @@ export async function mockClients(currencies: Currency[]) {
   clients.push(
     await mockClient(
       {
-        login: 'client03',
+        login: 'radek',
         password: 'pw',
-        firstName: 'Janina',
-        lastName: 'Janowicz',
+        firstName: 'Radosław',
+        lastName: 'Radosławski',
         birthday: '04-02-1988',
         PESEL: '88020493154',
         mail: 'client03@example.com'
