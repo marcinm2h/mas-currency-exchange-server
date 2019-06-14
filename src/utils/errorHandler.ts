@@ -1,8 +1,11 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-export const errorHandler = () => (err: Error, req: Request, res: Response) => {
-  console.log(err);
-  return res.send({
-    error: err.message
-  });
+export const errorHandler = () => (
+  error: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log(error);
+  return res.json({ error: error.message });
 };
