@@ -132,6 +132,34 @@ export async function mockClients(currencies: Currency[]) {
       { currencies }
     )
   );
+  clients.push(
+    await mockClient(
+      {
+        login: 'anna',
+        password: 'pw',
+        firstName: 'Anna',
+        lastName: 'Aneczko',
+        birthday: '04-02-1988',
+        PESEL: '88020493154',
+        mail: 'client03@example.com'
+      },
+      { currencies }
+    )
+  );
+  clients.push(
+    await mockClient(
+      {
+        login: 'gosia',
+        password: 'pw',
+        firstName: 'Małgorzata',
+        lastName: 'Mago',
+        birthday: '04-02-1988',
+        PESEL: '88020493154',
+        mail: 'client03@example.com'
+      },
+      { currencies }
+    )
+  );
 
   return clients;
 }
@@ -199,33 +227,89 @@ export async function mockSaleOffer({
 export async function mock() {
   const currencies = await mockCurrencies();
   const clients = await mockClients(currencies);
-  await mockPurchaseOffer({
-    owner: clients[0],
-    fromAmount: 100,
-    fromCurrency: currencies.find(currency => currency.symbol === 'PLN'),
-    toAmount: 200,
-    toCurrency: currencies.find(currency => currency.symbol === 'RUB')
-  });
-  await mockPurchaseOffer({
-    owner: clients[1],
-    fromAmount: 200,
-    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
-    toAmount: 300,
-    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
-  });
-  await mockSaleOffer({
-    owner: clients[1],
-    fromAmount: 200,
-    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
-    toAmount: 300,
-    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
-  });
-  await mockSaleOffer({
-    owner: clients[1],
-    participant: clients[0],
-    fromAmount: 250,
-    fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
-    toAmount: 1000,
-    toCurrency: currencies.find(currency => currency.symbol === 'PLN')
-  });
+  const randomClient = () =>
+    clients[Math.floor(Math.random() * clients.length)];
+  const randomNumber = (min = 1, max = 900) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+  const randomCurrencies = () => {
+    const idx1 = Math.floor(Math.random() * currencies.length);
+    let idx2 = Math.floor(Math.random() * currencies.length);
+    idx2 = idx2 === idx1 ? 1 : idx2;
+    return [currencies[idx1], currencies[idx2]];
+  };
+  const randomArgs = () => {
+    const [c1, c2] = randomCurrencies();
+    return {
+      owner: randomClient(),
+      fromAmount: randomNumber(),
+      fromCurrency: c1,
+      toAmount: randomNumber(),
+      toCurrency: c2
+    };
+  };
+
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockPurchaseOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+  await mockSaleOffer(randomArgs());
+
+  // await mockPurchaseOffer({
+  //   owner: randomClient(),
+  //   fromAmount: randomNumber(),
+  //   fromCurrency: c1,
+  //   toAmount: 200,
+  //   toCurrency: c2
+  // });
+  // await mockPurchaseOffer({
+  //   owner: clients[0],
+  //   fromAmount: 100,
+  //   fromCurrency: currencies.find(currency => currency.symbol === 'PLN'),
+  //   toAmount: 200,
+  //   toCurrency: currencies.find(currency => currency.symbol === 'RUB')
+  // });
+  // await mockPurchaseOffer({
+  //   owner: clients[1],
+  //   fromAmount: 200,
+  //   fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+  //   toAmount: 300,
+  //   toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  // });
+  // await mockSaleOffer({
+  //   owner: clients[1],
+  //   fromAmount: 200,
+  //   fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+  //   toAmount: 300,
+  //   toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  // });
+  // await mockSaleOffer({
+  //   owner: clients[1],
+  //   participant: clients[0],
+  //   fromAmount: 250,
+  //   fromCurrency: currencies.find(currency => currency.symbol === 'USD'),
+  //   toAmount: 1000,
+  //   toCurrency: currencies.find(currency => currency.symbol === 'PLN')
+  // });
 }
