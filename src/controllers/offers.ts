@@ -29,7 +29,7 @@ export const createOffer = async (
       toAmount: number;
       toCurrencyId: number;
     } = req.body;
-
+    debugger;
     if (fromCurrencyId === toCurrencyId) {
       throw new Error('From currency can not be same as to currency');
     }
@@ -61,7 +61,7 @@ export const createOffer = async (
       toCurrency
     });
 
-    const response = repository.save(offer);
+    const response = await repository.save(offer);
 
     res.json({
       data: response

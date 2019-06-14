@@ -163,7 +163,7 @@ export async function mockPurchaseOffer({
   offer.toAmount = toAmount;
 
   const offerRepository = getRepository(PurchaseOffer);
-  offerRepository.save(offer);
+  await offerRepository.save(offer);
 }
 
 export async function mockSaleOffer({
@@ -193,7 +193,7 @@ export async function mockSaleOffer({
   offer.toAmount = toAmount;
 
   const offerRepository = getRepository(SaleOffer);
-  offerRepository.save(offer);
+  await offerRepository.save(offer);
 }
 
 export async function mock() {
