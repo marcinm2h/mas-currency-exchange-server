@@ -12,7 +12,7 @@ export const listCurrencies = async (
     const currencyRepository = getRepository(Currency);
     const currencies = await currencyRepository.find();
 
-    res.json({
+    return res.json({
       data: currencies
     });
   } catch (e) {

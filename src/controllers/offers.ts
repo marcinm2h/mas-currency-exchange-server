@@ -8,7 +8,6 @@ import { Client } from '../models/Client';
 import { Currency } from '../models/Currency';
 import { Wallet } from '../models/Wallet';
 
-//FIXME: przenieść do user
 export const createOffer = async (
   req: Request,
   res: Response,
@@ -29,13 +28,17 @@ export const createOffer = async (
       toAmount: number;
       toCurrencyId: number;
     } = req.body;
+    if (!type || !fromAmount || !fromCurrencyId || !toAmount || !toCurrencyId) {
+      throw new Error('Fill in all required fields');
+    }
     if (fromCurrencyId === toCurrencyId) {
       throw new Error('From currency can not be same as to currency');
     }
     if (fromAmount < 1 || toAmount < 1) {
       throw new Error('Min offer amount is 1');
     }
-    const repository = getRepository(
+
+    const offerRepository = getRepository(
       type === 'purchase' ? PurchaseOffer : SaleOffer
     );
     const clientRepository = getRepository(Client);
@@ -52,17 +55,16 @@ export const createOffer = async (
     const currencyRepository = getRepository(Currency);
     const fromCurrency = await currencyRepository.findOne(fromCurrencyId);
     const toCurrency = await currencyRepository.findOne(toCurrencyId);
-    const offer = repository.create({
+    const offer = offerRepository.create({
       owner,
       fromAmount,
       fromCurrency,
       toAmount,
       toCurrency
     });
+    const response = await offerRepository.save(offer);
 
-    const response = await repository.save(offer);
-
-    res.json({
+    return res.json({
       data: response
     });
   } catch (e) {
@@ -85,7 +87,7 @@ export const listOffers = async (
       relations: ['fromCurrency', 'toCurrency', 'participant', 'owner']
     });
 
-    res.json({
+    return res.json({
       data: [...purchaseOffers, ...saleOffers]
     });
   } catch (e) {
@@ -106,7 +108,7 @@ export const listPurchaseOffers = async (
       where: { status }
     });
 
-    res.json({
+    return res.json({
       data: purchaseOffers
     });
   } catch (e) {
@@ -127,7 +129,7 @@ export const listSaleOffers = async (
       where: { status }
     });
 
-    res.json({
+    return res.json({
       data: saleOffers
     });
   } catch (e) {
@@ -147,7 +149,7 @@ export const getPurchaseOffer = async (
       relations: ['fromCurrency', 'toCurrency', 'participant', 'owner']
     });
 
-    res.json({
+    return res.json({
       data: purchaseOffer
     });
   } catch (e) {
@@ -167,7 +169,7 @@ export const getSaleOffer = async (
       relations: ['fromCurrency', 'toCurrency', 'participant', 'owner']
     });
 
-    res.json({
+    return res.json({
       data: saleOffer
     });
   } catch (e) {
@@ -250,8 +252,7 @@ export const acceptOffer = async (
     }
 
     await walletRepository.save([...ownerWallets, ...participantWallets]);
-
-    res.json({
+    return res.json({
       data: response
     });
   } catch (e) {
