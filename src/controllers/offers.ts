@@ -157,6 +157,38 @@ export const getPurchaseOffer = async (
   }
 };
 
+export const getUserOffers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.query;
+    const purchaseOfferRepository = getRepository(PurchaseOffer);
+    const saleOfferRepository = getRepository(SaleOffer);
+    const clientRepository = getRepository(Client);
+    const client = await clientRepository.findOne(userId);
+    const purchaseOffers = await purchaseOfferRepository.find({
+      relations: ['fromCurrency', 'toCurrency', 'participant', 'owner'],
+      where: {
+        owner: client
+      }
+    });
+    const saleOffers = await saleOfferRepository.find({
+      relations: ['fromCurrency', 'toCurrency', 'participant', 'owner'],
+      where: {
+        owner: client
+      }
+    });
+
+    return res.json({
+      data: [...purchaseOffers, ...saleOffers]
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const getSaleOffer = async (
   req: Request,
   res: Response,

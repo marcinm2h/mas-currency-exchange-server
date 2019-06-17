@@ -7,6 +7,9 @@ import * as uuid from 'uuid/v4';
 import { PurchaseOffer } from '../models/PurchaseOffer';
 import { SaleOffer } from '../models/SaleOffer';
 
+const randomNumber = (min = 1, max = 900) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
 async function mockClient(
   {
     login,
@@ -32,7 +35,7 @@ async function mockClient(
   const wallets = currencies.map(currency => {
     const wallet = new Wallet();
     wallet.currency = currency;
-    wallet.balance = parseFloat((Math.random() * 100000).toFixed(2));
+    wallet.balance = randomNumber(1000, 5000);
     return wallet;
   });
   const walletRepository = getRepository(Wallet);
@@ -229,8 +232,6 @@ export async function mock() {
   const clients = await mockClients(currencies);
   const randomClient = () =>
     clients[Math.floor(Math.random() * clients.length)];
-  const randomNumber = (min = 1, max = 900) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
   const randomCurrencies = () => {
     const idx1 = Math.floor(Math.random() * currencies.length);
     let idx2 = Math.floor(Math.random() * currencies.length);
@@ -241,9 +242,9 @@ export async function mock() {
     const [c1, c2] = randomCurrencies();
     return {
       owner: randomClient(),
-      fromAmount: randomNumber(),
+      fromAmount: randomNumber(50, 300),
       fromCurrency: c1,
-      toAmount: randomNumber(),
+      toAmount: randomNumber(50, 300),
       toCurrency: c2
     };
   };

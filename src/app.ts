@@ -45,7 +45,7 @@ const connectionOptions: ConnectionOptions = {
 };
 
 createConnection(connectionOptions).then(async connection => {
-  await mock();
+  // await mock();
   const app = express();
   app.use(
     session({
